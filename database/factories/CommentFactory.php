@@ -15,7 +15,7 @@ use Faker\Generator as Faker;
 
 $factory->define(\App\Models\Comment::class, function (Faker $faker) {
     return [
-        'created_at' => $faker->dateTimeBetween('-3 years', '-2 years', null) ,
+        'created_at' => $faker->dateTimeBetween('-2 years', '-2 years', null) ,
         'updated_at' => $faker->dateTimeBetween('-2 years', '-1 years', null) ,
         'content' => $faker->text,
     ];
