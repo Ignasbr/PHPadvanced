@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
+    /**
+     * @var array
+     */
     protected $fillable = [
         'title',
         'created_at',
@@ -19,5 +22,24 @@ class Comment extends Model
 
     use SoftDeletes;
 
+    /**
+     * @var array
+     */
     public $timestamps = ['created_at', 'updated_at'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

@@ -22,6 +22,13 @@ $factory->define(\App\Models\Profile::class, function (Faker $faker) {
         'street' => $faker->streetName,
         'house' => $faker->numberBetween(1,500),
         'apartament' => $faker->numberBetween(1,80),
-        'user_id' => factory(\App\Models\User::class)->create()->id ,
     ];
 });
+
+$factory
+    ->state(App\Models\User::class, 'with_profile', [])
+    ->afterCreatingState(App\Models\User::class, 'with_profile', function ($user, $faker) {
+        factory(App\Models\Profile::class)->create([
+            'user_id' => $user->id
+        ]);
+    });
