@@ -24,11 +24,16 @@ class Post extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault(['name' => 'Guest']);
     }
 
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsToMany(Post::class , 'posts_categories', 'post_id', 'category_id');
     }
 }
