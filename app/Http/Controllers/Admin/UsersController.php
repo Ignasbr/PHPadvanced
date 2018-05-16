@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -62,9 +65,13 @@ class UsersController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
-        //
+        $user = User::find($id);
+
+        return view('users.edit',
+            compact('user')
+        );
     }
 
     /**
@@ -74,9 +81,40 @@ class UsersController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        //
+
+        $user = User::find($id);
+
+        $request->validate([
+            'name' => 'required||max:30',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'role_id' => 'required',
+        ]);
+
+
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->role_id = $request->get('role_id');
+//        $image = Image::create([
+//            'title' => $user->name,
+//            'path' => Storage::disk('public')->put('images/', $request->file('profileImage')),
+//        ]);
+
+        $image = Image::create([
+            'title' => $user->name,
+            'path' => Storage::disk('public')->put('images/', $request->file('profileImage')),
+        ]);
+
+        $user->image()->associate($image);
+
+        $user->save();
+
+        return redirect(route('admin.users.show', ['id' => $user ->id]));
     }
 
     /**

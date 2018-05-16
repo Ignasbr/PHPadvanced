@@ -15,12 +15,12 @@ use Faker\Generator as Faker;
 
 $factory->define(\App\Models\Post::class, function (Faker $faker) {
     return [
-        'title'              => $faker->title,
+        'title'              => $faker->text(20),
         'created_at'         => $faker->dateTimeBetween('-3 years', '-2 years', null),
         'updated_at'         => $faker->dateTimeBetween('-2 years', '-1 years', null),
         'anonymous_comments' => $faker->boolean,
         'content'            => $faker->text,
-        'slug'               => $faker->slug,
+
     ];
 });
 

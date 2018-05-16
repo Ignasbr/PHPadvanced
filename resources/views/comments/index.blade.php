@@ -26,6 +26,7 @@
                             <tr role="row">
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Post title</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -33,6 +34,8 @@
                             <tr role="row" class="odd" style="background-color: @if($loop->index%2 == 0) #bdc3c7 @else white @endif">
                                 <td >{{$comment->id}}</td>
                                 <td >{{$comment->user->name}}</td>
+                                <td >{{$comment->post->title}}</td>
+                                <td><a href="{{ route('admin.comments.show', ['id' => $comment->id]) }}">View</a> </td>
 
                             </tr>
     @endforeach

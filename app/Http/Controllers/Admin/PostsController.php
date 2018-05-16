@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('posts.create',
+        ['categories' => Category::all()]);
     }
 
     /**
@@ -39,8 +41,29 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        $request->validate([
+            'title' => 'required|unique:posts|max:30',
+            'content' => 'required',
+            'anonymous_comments' => 'boolean|required',
+        ]);
+
+
+
+        $post = Post::create([
+            'title' => $request->get('title'),
+            'anonymous_comments' => $request->get('anonymous_comments'),
+            'content' => $request->get('content'),
+            'user_id' => auth()->user()->id,
+            'categories' => $request->input('categories'),
+
+                ]);
+
+
+        return redirect(route('admin.posts.index'));
     }
+
 
     /**
      * Display the specified resource.
@@ -67,8 +90,10 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
 
+        $categories = Category::all();
+
         return view('posts.edit',
-            compact('post')
+            compact('post', 'categories')
         );
     }
 
@@ -81,10 +106,18 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $request->validate([
+            'title' => 'required|unique:posts|max:30',
+            'content' => 'required',
+        ]);
+
         $post = Post::find($id);
 
         $post->title = $request->get('title');
         $post->content = $request->get('content');
+        $post->category()->sync($request->category);
+
 
         $post->save();
 

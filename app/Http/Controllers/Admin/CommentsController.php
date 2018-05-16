@@ -47,9 +47,13 @@ class CommentsController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show($id)
     {
-        //
+        $comment = Comment::find($id);
+
+        return view('comments.show',
+            compact('comment')
+        );
     }
 
     /**
@@ -58,9 +62,13 @@ class CommentsController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment)
+    public function edit($id)
     {
-        //
+        $comment = Comment::find($id);
+
+        return view('comments.edit',
+            compact('comment')
+        );
     }
 
     /**
@@ -70,9 +78,19 @@ class CommentsController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'content' => 'required',
+        ]);
+
+        $comment = Comment::find($id);
+
+        $comment->content = $request->get('content');
+
+        $comment->save();
+
+        return redirect(route('admin.comments.index'));
     }
 
     /**
@@ -81,8 +99,10 @@ class CommentsController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy($id)
     {
-        //
+        Comment::destroy($id);
+
+        return redirect(route('admin.comments.index'));
     }
 }

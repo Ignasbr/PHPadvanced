@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Post extends Model
 {
+    use HasSlug;
+
     protected $fillable = [
         'title',
         'user_id',
@@ -35,5 +39,12 @@ class Post extends Model
     public function category()
     {
         return $this->belongsToMany(Post::class , 'posts_categories', 'post_id', 'category_id');
+    }
+
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug');
     }
 }

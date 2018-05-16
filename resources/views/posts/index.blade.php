@@ -49,7 +49,7 @@
                         {{$posts->links()}}
                     </div>
                 <div class="row"><div class="col-sm-7">
-                        <a type="button" class="btn btn-success">Add post</a>
+                        <a type="button" href="{{route('admin.posts.create')}}" class="btn btn-success">Add post</a>
                     </div>
                 </div>
             </div>

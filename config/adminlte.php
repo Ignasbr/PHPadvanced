@@ -142,6 +142,20 @@ return [
             'label'       => 0,
             'label_color' => 'success',
         ],
+        [
+            'text'        => 'Categories',
+            'route'         => 'admin.categories.index',
+            'icon'        => 'file',
+            'label'       => 0,
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Messages',
+            'route'         => 'messages',
+            'icon'        => 'file',
+            'label'       => 0,
+            'label_color' => 'success',
+        ],
         'ACCOUNT SETTINGS',
         [
             'text' => 'Profile',
